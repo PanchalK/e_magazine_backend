@@ -3,6 +3,7 @@ const Editor = require("../schemas/editorSchema");
 const Article = require("../schemas/articleSchema");
 const Message = require("../schemas/messageSchema");
 const Magazine = require("../schemas/magazineSchema");
+const Placement = require("../schemas/placementSchema");
 
 exports.getAdmin = (request, response) => {
     Admin.findOne({email: request.body.email})
@@ -24,6 +25,16 @@ exports.getEditor = (request, response) => {
     })
 }
 
+exports.getArticles = (request, response) => {
+    Article.find()
+    .then((res) => {
+        return response.status(200).json(res);
+    })
+    .catch((error)=>{
+        response.status(404).json({ message: error.message })
+    })
+}
+
 exports.addArticle = (request, response) => {
     const article = request.body;
 
@@ -31,6 +42,38 @@ exports.addArticle = (request, response) => {
     newArticle.save()
     .then((res) => {
         console.log("data submitted");
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.editArticle = (request, response) => {
+    const articleContent = request.body;
+    Article.updateOne({_id: request.params.id},
+        {
+            $set : {
+                title: articleContent.title,
+                article: articleContent.content
+            }
+        })
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.editArticleApproval = (request, response) => {
+    Article.updateOne({_id: request.params.id},
+        {
+            $set : {
+            approved :true
+            }
+        })
+    .then((res) => {
         return response.status(200).json(res);
      })
      .catch((error)=>{
@@ -148,31 +191,46 @@ exports.deleteEditor = (request, response) => {
      })
 }
 
-// // Get a user by id
-// exports.getUserById = (request, response) => {
-//     Programme.findById(request.params.id)
-//     .then((res) => {
-//         console.log(res);
-//         return response.status(200).json(res);
-//      })
-//      .catch((error)=>{
-//          response.status(404).json({ message: error.message })
-//      })
-// }
+exports.deleteArticle = (request, response) => {
+    Article.deleteOne({_id: request.params.id})
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
 
+exports.getPlacements = (request, response) => {
+    Placement.find()
+    .then((res) => {
+        return response.status(200).json(res);
+    })
+    .catch((error)=>{
+        response.status(404).json({ message: error.message })
+    })
+}
 
-// ///stdent Code Outcome functions////
+exports.addPlacement = (request, response) => {
+    const placement = request.body;
 
-// exports.addCOofUsers = (request , response) => {
-//     const newCO = request.body;
+    const newPlacement = new Placement(placement);
+    newPlacement.save()
+    .then((res) => {
+        console.log("data submitted");
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
 
-//     const newSession = new Session(newCO);
-//     newSession.save()
-//     .then((res) => {
-//         console.log("data submitted");
-//         return response.status(200).json(res);
-//      })
-//      .catch((error)=>{
-//          response.status(404).json({ message: error.message })
-//      })
-// }
+exports.deletePlacement = (request, response) => {
+    Placement.deleteOne({_id: request.params.id})
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
