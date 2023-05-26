@@ -5,6 +5,6 @@ const placementSchema = mongoose.Schema({
     link: String
 });
 
-const Placement = mongoose.model('placementrecords', placementSchema);
+const Placement = mongoose.model('placementrecord', placementSchema);
 
 module.exports = Placement;

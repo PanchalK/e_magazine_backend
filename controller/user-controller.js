@@ -4,6 +4,7 @@ const Article = require("../schemas/articleSchema");
 const Message = require("../schemas/messageSchema");
 const Magazine = require("../schemas/magazineSchema");
 const Placement = require("../schemas/placementSchema");
+const Event = require("../schemas/eventSchema");
 
 exports.getAdmin = (request, response) => {
     Admin.findOne({email: request.body.email})
@@ -154,9 +155,6 @@ exports.addMagazine = (request, response) => {
 }
 
 exports.editMagazine = (request, response) => {
-    // let magazine = request.body;
-
-    // const editMagazineData = new Magazine(magazine);
     Magazine.updateOne({_id: request.params.id},
         {
             $set : {
@@ -227,6 +225,57 @@ exports.addPlacement = (request, response) => {
 
 exports.deletePlacement = (request, response) => {
     Placement.deleteOne({_id: request.params.id})
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.getEvents = (request, response) => {
+    Event.find()
+    .then((res) => {
+        return response.status(200).json(res);
+    })
+    .catch((error)=>{
+        response.status(404).json({ message: error.message })
+    })
+}
+
+exports.addEvent = (request, response) => {
+    const event = request.body;
+
+    const newEvent = new Event(event);
+    newEvent.save()
+    .then((res) => {
+        console.log("data submitted");
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.deleteEvent = (request, response) => {
+    Event.deleteOne({_id: request.params.id})
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.editEvent = (request, response) => {
+    const eventContent = request.body;
+    Event.updateOne({_id: request.params.id},
+        {
+            $set : {
+                title: eventContent.title,
+                content: eventContent.content
+            }
+        })
     .then((res) => {
         return response.status(200).json(res);
      })
