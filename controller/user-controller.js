@@ -5,6 +5,7 @@ const Message = require("../schemas/messageSchema");
 const Magazine = require("../schemas/magazineSchema");
 const Placement = require("../schemas/placementSchema");
 const Event = require("../schemas/eventSchema");
+const Publication = require("../schemas/publicationSchema");
 
 exports.getAdmin = (request, response) => {
     Admin.findOne({email: request.body.email})
@@ -274,6 +275,57 @@ exports.editEvent = (request, response) => {
             $set : {
                 title: eventContent.title,
                 content: eventContent.content
+            }
+        })
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.getPublications = (request, response) => {
+    Publication.find()
+    .then((res) => {
+        return response.status(200).json(res);
+    })
+    .catch((error)=>{
+        response.status(404).json({ message: error.message })
+    })
+}
+
+exports.addPublication = (request, response) => {
+    const publication = request.body;
+
+    const newPublication = new Publication(publication);
+    newPublication.save()
+    .then((res) => {
+        console.log("data submitted");
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.deletePublication = (request, response) => {
+    Publication.deleteOne({_id: request.params.id})
+    .then((res) => {
+        return response.status(200).json(res);
+     })
+     .catch((error)=>{
+         response.status(404).json({ message: error.message })
+     })
+}
+
+exports.editPublication = (request, response) => {
+    const publicationContent = request.body;
+    Publication.updateOne({_id: request.params.id},
+        {
+            $set : {
+                title: publicationContent.title,
+                abstract: publicationContent.abstract
             }
         })
     .then((res) => {
