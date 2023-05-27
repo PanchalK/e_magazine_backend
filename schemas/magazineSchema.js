@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const magazineSchema = mongoose.Schema({
     magazinecode: String,
     title: String,
-    releasedate: {day: Number, month: String, year: Number},
+    releasedate: Date,
     coverimg: String,
     link: String,
     approved: Boolean

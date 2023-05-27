@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const publicationSchema = mongoose.Schema({
     title: String,
     authors: String,
-    publicationdate: Date,
+    publicationdate: String,
     abstract: String,
     venue: String,
     url: String
