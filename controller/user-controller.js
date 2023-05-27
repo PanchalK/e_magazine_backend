@@ -138,6 +138,28 @@ exports.getEditors = (request, response) => {
     });
 };
 
+exports.editEditor = (request, response) => {
+  const editorContent = request.body;
+  Editor.updateOne(
+    { _id: request.params.id },
+    {
+      $set: {
+        name: editorContent.name,
+        email: editorContent.email,
+        designation: editorContent.designation,
+        post: editorContent.post,
+        program: editorContent.program,
+      },
+    }
+  )
+    .then((res) => {
+      return response.status(200).json(res);
+    })
+    .catch((error) => {
+      response.status(404).json({ message: error.message });
+    });
+};
+
 exports.getMagazines = (request, response) => {
   Magazine.find()
     .then((res) => {

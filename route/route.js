@@ -12,6 +12,7 @@ router.post('/addadmin', userController.addAdmin);
 router.post('/addeditor', userController.addEditor);
 router.post('/getmessage', userController.getMessage);
 router.get('/geteditors', userController.getEditors);
+router.put('/updateeditor/:id', userController.editEditor);
 router.post('/addmagazine', userController.addMagazine);
 router.get('/getmagazines', userController.getMagazines);
 router.put('/updatemagazine/:id', userController.editMagazine);
