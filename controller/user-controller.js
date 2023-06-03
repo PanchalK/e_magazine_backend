@@ -128,6 +128,61 @@ exports.getMessage = (request, response) => {
     });
 };
 
+exports.getMessages = (request, response) => {
+  Message.find()
+    .then((res) => {
+      return response.status(200).json(res);
+    })
+    .catch((error) => {
+      response.status(404).json({ message: error.message });
+    });
+};
+
+exports.addMessage = (request, response) => {
+  const message = request.body;
+
+  const messagedetails = new Message(message);
+  messagedetails
+    .save()
+    .then((res) => {
+      console.log("data submitted");
+      return response.status(200).json(res);
+    })
+    .catch((error) => {
+      response.status(404).json({ message: error.message });
+    });
+};
+
+exports.editMessage = (request, response) => {
+  const messageContent = request.body;
+  Message.updateOne(
+    { _id: request.params.id },
+    {
+      $set: {
+        name: messageContent.name,
+        designation: messageContent.designation,
+        message: messageContent.message,
+      },
+    }
+  )
+    .then((res) => {
+      return response.status(200).json(res);
+    })
+    .catch((error) => {
+      response.status(404).json({ message: error.message });
+    });
+};
+
+exports.deleteMessage = (request, response) => {
+  Message.deleteOne({ _id: request.params.id })
+    .then((res) => {
+      return response.status(200).json(res);
+    })
+    .catch((error) => {
+      response.status(404).json({ message: error.message });
+    });
+};
+
 exports.getEditors = (request, response) => {
   Editor.find()
     .then((res) => {
